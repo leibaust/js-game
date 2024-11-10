@@ -1,0 +1,32 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #282c34;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    margin: 20px 0;
+}
+
+canvas {
+    border: 2px solid white;
+}
+
+#play-again-btn {
+    display: none;
+}
+
+#change-mode {
+    display: none;
+}
+
+#game-board {
+    display: none;
+}
+
+#splash {
+    display: block;
+}
