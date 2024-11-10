@@ -1,8 +1,8 @@
-// DOM Elements
-const canvas = document.getElementById("gameCanvas");
-
 // HTML5 Canvas API
+const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+
+// DOM Elements
 const healthSpan = document.getElementById("health");
 const scoreSpan = document.getElementById("score");
 const highScoreSpan = document.getElementById("high-score");
@@ -29,8 +29,15 @@ let enemyInterval;
 const playerImage = new Image();
 playerImage.src = "assets/player.png";
 
-const enemyImage = new Image();
-enemyImage.src = "assets/enemy.png";
+const enemyImage = [
+  new Image(),
+  new Image(),
+  new Image(),
+];
+
+enemyImage[0].src = "assets/enemy1.png";
+enemyImage[1].src = "assets/enemy2.png";
+enemyImage[2].src = "assets/enemy3.png";
 
 const projectileImage = new Image();
 projectileImage.src = "assets/projectile.png";
@@ -41,7 +48,7 @@ function resetGame() {
   player = {
     x: canvas.width / 2,
     y: canvas.height / 2,
-    size: 20,
+    size: 40,
     speed: 5,
     direction: { x: 0, y: 0 },
     lastDirection: { x: 1, y: 0 },
@@ -80,9 +87,12 @@ function updatePlayer() {
 }
 
 function drawEnemies() {
-  ctx.fillStyle = "red";
   enemies.forEach((enemy) => {
-    ctx.fillRect(enemy.x, enemy.y, enemy.size, enemy.size);
+    if (!enemy.image) {
+      const randomEnemy = enemyImage[Math.floor(Math.random() * enemyImage.length)];
+      enemy.image = randomEnemy;
+    }
+    ctx.drawImage(enemy.image, enemy.x, enemy.y, enemy.size, enemy.size);
   });
 }
 
@@ -101,9 +111,8 @@ function updateEnemies() {
 }
 
 function drawProjectiles() {
-  ctx.fillStyle = "blue";
   projectiles.forEach((projectile) => {
-    ctx.fillRect(projectile.x, projectile.y, projectile.size, projectile.size);
+    ctx.drawImage(projectileImage, projectile.x, projectile.y, projectile.size, projectile.size);
   });
 }
 
@@ -127,7 +136,7 @@ function spawnEnemy() {
   let enemy = {
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
-    size: 20,
+    size: 40,
     speed: 2,
     direction: { x: Math.random() * 2 - 1, y: Math.random() * 2 - 1 },
   };
@@ -177,7 +186,7 @@ function shootProjectile() {
   let projectile = {
     x: player.x + player.size / 2,
     y: player.y + player.size / 2,
-    size: 5,
+    size: 15,
     speed: 10,
     direction: { x: player.lastDirection.x, y: player.lastDirection.y },
   };
@@ -222,7 +231,6 @@ function gameLoop() {
       }
     });
   });
-
   requestAnimationFrame(gameLoop);
 }
 
@@ -240,6 +248,7 @@ function changeMode() {
   resetGame();
 }
 
+// Button Event Listeners
 modeSelection.addEventListener("click", function () {
   const target = event.target;
   splashScreen.style.display = "none";
