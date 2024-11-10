@@ -15,13 +15,13 @@ canvas {
     border: 2px solid white;
 }
 
-#play-again-btn {
+/* #play-again-btn {
     display: none;
 }
 
 #change-mode {
     display: none;
-}
+} */
 
 #game-board {
     display: none;

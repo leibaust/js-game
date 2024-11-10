@@ -1,0 +1,5 @@
+sprites: https://www.freepik.com/free-ai-image/8-bits-characters-gaming-assets_133332225.htm#fromView=search&page=1&position=9&uuid=5a3045ce-bb73-46cf-b844-0950f5eae1bc
+enemy hit sfx: https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=95847"
+game music: Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=37872">Pixabay</a>
+player hit: Sound Effect by <a href="https://pixabay.com/users/driken5482-45721595/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=236672">Driken Stan</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=236672">Pixabay</a>
+player death: Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=43894">Pixabay</a>

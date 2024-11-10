@@ -24,6 +24,8 @@ let score;
 let highScore = 0;
 let shootInterval;
 let enemyInterval;
+// Setting the default mode to null for debugging purposes
+let currentMode = null;
 
 // Images
 const playerImage = new Image();
@@ -41,6 +43,12 @@ enemyImage[2].src = "assets/enemy3.png";
 
 const projectileImage = new Image();
 projectileImage.src = "assets/projectile.png";
+
+// Sounds
+const enemyHit = new Audio("assets/enemy-hit.mp3");
+const playerHit = new Audio("assets/player-hit.mp3");
+const gameOver = new Audio("assets/game-over.mp3");
+const menuMusic = new Audio("assets/menu-music.mp3");
 
 
 // Functions
@@ -199,11 +207,13 @@ function gameLoop() {
       highScore = score;
       highScoreSpan.textContent = highScore;
     }
-    alert("Game Over! Your score is: " + score);
-    playAgainBtn.style.display = "block";
-    changeModeBtn.style.display = "block";
-    clearInterval(shootInterval);
-    clearInterval(enemyInterval);
+    gameOver.play();
+    setTimeout(() => {
+      alert("Game Over! Your score is: " + score);
+      // playAgainBtn.style.display = "block";
+      // changeModeBtn.style.display = "block";
+      clearInterval(shootInterval);
+      clearInterval(enemyInterval);}, 200);
     return;
   }
 
@@ -220,6 +230,10 @@ function gameLoop() {
       player.health -= 10;
       healthSpan.textContent = player.health;
       enemies.splice(enemyIndex, 1);
+
+      //Cloning the audio element to play the sound multiple times
+      const clonePlayerHit = playerHit.cloneNode();
+      clonePlayerHit.play();
     }
 
     projectiles.forEach((projectile, projectileIndex) => {
@@ -228,6 +242,8 @@ function gameLoop() {
         scoreSpan.textContent = score;
         enemies.splice(enemyIndex, 1);
         projectiles.splice(projectileIndex, 1);
+        const cloneEnemyHit = enemyHit.cloneNode();
+        cloneEnemyHit.play();
       }
     });
   });
@@ -248,7 +264,7 @@ function changeMode() {
   resetGame();
 }
 
-// Button Event Listeners
+//Event Listeners
 modeSelection.addEventListener("click", function () {
   const target = event.target;
   splashScreen.style.display = "none";
@@ -258,31 +274,50 @@ modeSelection.addEventListener("click", function () {
   clearInterval(enemyInterval);
 
   if (target === easyMode) {
+    currentMode = "easy";
     shootInterval = setInterval(shootProjectile, 100);
     enemyInterval = setInterval(spawnEnemy, 1500);
   } else if (target === medMode) {
+    currentMode = "medium";
     shootInterval = setInterval(shootProjectile, 250);
     enemyInterval = setInterval(spawnEnemy, 1000);
   } else if (target === hardMode) {
+    currentMode = "hard";
     shootInterval = setInterval(shootProjectile, 500);
     enemyInterval = setInterval(spawnEnemy, 500);
   } else if (target === hellMode) {
+    currentMode = "hell";
     shootInterval = setInterval(shootProjectile, 500);
     enemyInterval = setInterval(spawnEnemy, 100);
   }
-
   initGame();
-
 });
 
 playAgainBtn.addEventListener("click", function () {
-  playAgainBtn.style.display = "none";
-  changeModeBtn.style.display = "none";
+
+  clearInterval(shootInterval); 
+  clearInterval(enemyInterval); 
+  if (currentMode === 'easy') { 
+    shootInterval = setInterval(shootProjectile, 100); 
+    enemyInterval = setInterval(spawnEnemy, 1500); 
+  } else if (currentMode === 'medium') { 
+    shootInterval = setInterval(shootProjectile, 250); 
+    enemyInterval = setInterval(spawnEnemy, 1000); 
+  } else if (currentMode === 'hard') { 
+    shootInterval = setInterval(shootProjectile, 500); 
+    enemyInterval = setInterval(spawnEnemy, 500); 
+  } else if (currentMode === 'hell') { 
+    shootInterval = setInterval(shootProjectile, 500); 
+    enemyInterval = setInterval(spawnEnemy, 100); 
+  }
+
+  // playAgainBtn.style.display = "none";
+  // changeModeBtn.style.display = "none";
   initGame();
 });
 
 changeModeBtn.addEventListener("click", function () {
-  playAgainBtn.style.display = "none";
-  changeModeBtn.style.display = "none";
+  // playAgainBtn.style.display = "none";
+  // changeModeBtn.style.display = "none";
   changeMode();
 });
