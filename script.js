@@ -24,8 +24,10 @@ let score;
 let highScore = 0;
 let shootInterval;
 let enemyInterval;
-// Setting the default mode to null for debugging purposes
+// Setting the default mode
 let currentMode = null;
+// Global variable to track animation frame
+let animationFrameId;
 
 // Images
 const playerImage = new Image();
@@ -57,7 +59,7 @@ function resetGame() {
     x: canvas.width / 2,
     y: canvas.height / 2,
     size: 40,
-    speed: 5,
+    speed: 2,
     direction: { x: 0, y: 0 },
     lastDirection: { x: 1, y: 0 },
     health: 100,
@@ -202,6 +204,7 @@ function shootProjectile() {
 }
 
 function gameLoop() {
+  console.log("Game Loop is running");
   if (player.health <= 0) {
     if (score > highScore) {
       highScore = score;
@@ -210,12 +213,14 @@ function gameLoop() {
     gameOver.play();
     setTimeout(() => {
       alert("Game Over! Your score is: " + score);
-      // playAgainBtn.style.display = "block";
-      // changeModeBtn.style.display = "block";
       clearInterval(shootInterval);
-      clearInterval(enemyInterval);}, 200);
+      clearInterval(enemyInterval);}, 500);
+      
     return;
   }
+
+  // Stops animation frame to prevent stacking game loops
+  cancelAnimationFrame(animationFrameId);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   updatePlayer();
@@ -247,25 +252,28 @@ function gameLoop() {
       }
     });
   });
-  requestAnimationFrame(gameLoop);
+  animationFrameId = requestAnimationFrame(gameLoop);
 }
 
 function initGame() {
+  cancelAnimationFrame(animationFrameId);
   resetGame();
+  animationFrameId = requestAnimationFrame(gameLoop);
   gameLoop();
 
   window.addEventListener("keydown", handleMovement);
   window.addEventListener("keyup", stopMovement);
+
 }
 
 function changeMode() {
   splashScreen.style.display = "block";
   gameBoard.style.display = "none";
-  resetGame();
 }
 
 //Event Listeners
 modeSelection.addEventListener("click", function () {
+  cancelAnimationFrame(animationFrameId);
   const target = event.target;
   splashScreen.style.display = "none";
   gameBoard.style.display = "block";
@@ -275,7 +283,7 @@ modeSelection.addEventListener("click", function () {
 
   if (target === easyMode) {
     currentMode = "easy";
-    shootInterval = setInterval(shootProjectile, 100);
+    shootInterval = setInterval(shootProjectile, 150);
     enemyInterval = setInterval(spawnEnemy, 1500);
   } else if (target === medMode) {
     currentMode = "medium";
@@ -294,7 +302,7 @@ modeSelection.addEventListener("click", function () {
 });
 
 playAgainBtn.addEventListener("click", function () {
-
+  cancelAnimationFrame(animationFrameId);
   clearInterval(shootInterval); 
   clearInterval(enemyInterval); 
   if (currentMode === 'easy') { 
@@ -310,14 +318,10 @@ playAgainBtn.addEventListener("click", function () {
     shootInterval = setInterval(shootProjectile, 500); 
     enemyInterval = setInterval(spawnEnemy, 100); 
   }
-
-  // playAgainBtn.style.display = "none";
-  // changeModeBtn.style.display = "none";
   initGame();
 });
 
 changeModeBtn.addEventListener("click", function () {
-  // playAgainBtn.style.display = "none";
-  // changeModeBtn.style.display = "none";
+  cancelAnimationFrame(animationFrameId);
   changeMode();
 });
