@@ -1,27 +1,78 @@
 body {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    background-color: #282c34;
-    color: white;
+    height: 100vh;
+    margin: 0;
+    background-color: #000; 
+    color: #fff; 
     font-family: Arial, sans-serif;
 }
 
-h1 {
-    margin: 20px 0;
+h1,
+p {
+    margin: 0;
 }
 
-canvas {
-    border: 2px solid white;
+h1 img {
+    max-width: 50rem;
 }
 
-/* #play-again-btn {
-    display: none;
+#game-board {
+    text-align: center;
 }
 
-#change-mode {
-    display: none;
-} */
+#gameCanvas {
+    border: 2px solid #fff;
+    background: url('assets/ground.png') no-repeat center center;
+    background-size: cover;
+}
+
+#splash {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('assets/splash.gif') no-repeat center center;
+    background-size: 900px 600px;
+    width: 100%;
+    height: 100vh;
+    color: #fff;
+}
+#logo { 
+    position: absolute; 
+    top: 25%; 
+    left: 50%; 
+    top: 35vh;
+    transform: translate(-50%, -50%); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    max-width: 900px;
+    height: auto;
+}
+
+#logo img {
+    max-width: 100%;
+    height: auto;
+}
+
+#mode-btns button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+#mode-btns { 
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
 
 #game-board {
     display: none;

@@ -50,7 +50,9 @@ projectileImage.src = "assets/projectile.png";
 const enemyHit = new Audio("assets/enemy-hit.mp3");
 const playerHit = new Audio("assets/player-hit.mp3");
 const gameOver = new Audio("assets/game-over.mp3");
-const menuMusic = new Audio("assets/menu-music.mp3");
+const gameMusic = new Audio("assets/bgMusic.mp3");
+
+
 
 
 // Functions
@@ -60,7 +62,7 @@ function resetGame() {
     y: canvas.height / 2,
     size: 40,
     speed: 2,
-    direction: { x: 0, y: 0 },
+    direction: { x: 0, y: 0 }, 
     lastDirection: { x: 1, y: 0 },
     health: 100,
   };
@@ -205,12 +207,15 @@ function shootProjectile() {
 
 function gameLoop() {
   console.log("Game Loop is running");
+  gameMusic.play();
   if (player.health <= 0) {
     if (score > highScore) {
       highScore = score;
       highScoreSpan.textContent = highScore;
     }
     gameOver.play();
+    gameMusic.pause();
+    gameMusic.currentTime = 0;
     setTimeout(() => {
       alert("Game Over! Your score is: " + score);
       clearInterval(shootInterval);
@@ -298,6 +303,8 @@ modeSelection.addEventListener("click", function () {
     shootInterval = setInterval(shootProjectile, 500);
     enemyInterval = setInterval(spawnEnemy, 100);
   }
+  gameMusic.pause();
+  gameMusic.currentTime = 0;
   initGame();
 });
 
@@ -318,10 +325,14 @@ playAgainBtn.addEventListener("click", function () {
     shootInterval = setInterval(shootProjectile, 500); 
     enemyInterval = setInterval(spawnEnemy, 100); 
   }
+  gameMusic.pause();
+  gameMusic.currentTime = 0;
   initGame();
 });
 
 changeModeBtn.addEventListener("click", function () {
+  gameMusic.pause();
+  gameMusic.currentTime = 0;
   cancelAnimationFrame(animationFrameId);
   changeMode();
 });
