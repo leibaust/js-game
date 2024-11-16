@@ -4,7 +4,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #000; 
+    background-color: darkslategrey;
     color: #fff; 
     font-family: Arial, sans-serif;
 }
@@ -12,10 +12,17 @@ body {
 h1,
 p {
     margin: 0;
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
 }
 
 h1 img {
     max-width: 50rem;
+}
+
+#highScore {
+    margin-bottom: 1rem;
 }
 
 #game-board {
@@ -62,6 +69,19 @@ h1 img {
     margin: 10px;
     padding: 10px 20px;
     font-size: 16px;
+    width: 150px;
+    background-color: #FAE9B9;
+    border-color: white;
+}
+
+#change-mode,
+#play-again-btn {
+    width: 200px;
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #FAE9B9;
+    border-color: white
 }
 
 #mode-btns { 
@@ -81,3 +101,5 @@ h1 img {
 #splash {
     display: block;
 }
+
+

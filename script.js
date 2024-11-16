@@ -336,3 +336,8 @@ changeModeBtn.addEventListener("click", function () {
   cancelAnimationFrame(animationFrameId);
   changeMode();
 });
+
+document.addEventListener('keydown', function(event) { 
+  if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+    event.preventDefault(); } 
+  });
