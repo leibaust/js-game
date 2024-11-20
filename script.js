@@ -52,27 +52,7 @@ const playerHit = new Audio("assets/player-hit.mp3");
 const gameOver = new Audio("assets/game-over.mp3");
 const gameMusic = new Audio("assets/bgMusic.mp3");
 
-
-
-
 // Functions
-function resetGame() {
-  player = {
-    x: canvas.width / 2,
-    y: canvas.height / 2,
-    size: 40,
-    speed: 2,
-    direction: { x: 0, y: 0 }, 
-    lastDirection: { x: 1, y: 0 },
-    health: 100,
-  };
-  enemies = [];
-  projectiles = [];
-  score = 0;
-  healthSpan.textContent = player.health;
-  scoreSpan.textContent = score;
-}
-
 function drawPlayer() {
     ctx.drawImage(playerImage, player.x, player.y, player.size, player.size);
 }
@@ -205,6 +185,23 @@ function shootProjectile() {
   projectiles.push(projectile);
 }
 
+function resetGame() {
+  player = {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    size: 40,
+    speed: 2,
+    direction: { x: 0, y: 0 }, 
+    lastDirection: { x: 1, y: 0 },
+    health: 100,
+  };
+  enemies = [];
+  projectiles = [];
+  score = 0;
+  healthSpan.textContent = player.health;
+  scoreSpan.textContent = score;
+}
+
 function gameLoop() {
   console.log("Game Loop is running");
   gameMusic.play();
@@ -276,7 +273,7 @@ function changeMode() {
   gameBoard.style.display = "none";
 }
 
-//Event Listeners
+// Button Listeners
 modeSelection.addEventListener("click", function () {
   cancelAnimationFrame(animationFrameId);
   const target = event.target;
@@ -337,6 +334,7 @@ changeModeBtn.addEventListener("click", function () {
   changeMode();
 });
 
+// Prevents scrolling with arrow keys
 document.addEventListener('keydown', function(event) { 
   if (event.key === "ArrowUp" || event.key === "ArrowDown") {
     event.preventDefault(); } 
