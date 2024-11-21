@@ -135,12 +135,12 @@ function spawnEnemy() {
   enemies.push(enemy);
 }
 
-function isColliding(rect1, rect2) {
+function isColliding(object1, object2) {
   return (
-    rect1.x < rect2.x + rect2.size &&
-    rect1.x + rect1.size > rect2.x &&
-    rect1.y < rect2.y + rect2.size &&
-    rect1.y + rect1.size > rect2.y
+    object1.x < object2.x + object2.size &&
+    object1.x + object1.size > object2.x &&
+    object1.y < object2.y + object2.size &&
+    object1.y + object1.size > object2.y
   );
 }
 
