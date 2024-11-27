@@ -28,6 +28,8 @@ let enemyInterval;
 let currentMode = null;
 // Global variable to track animation frame
 let animationFrameId;
+let lastShotTime = 0;
+const SHOOT_COOLDOWN = 500; // Milliseconds between shots
 
 // Images
 const playerImage = new Image();
@@ -53,6 +55,9 @@ const gameOver = new Audio("assets/game-over.mp3");
 const gameMusic = new Audio("assets/bgMusic.mp3");
 
 // Functions
+
+
+
 function drawPlayer() {
     ctx.drawImage(playerImage, player.x, player.y, player.size, player.size);
 }
@@ -102,26 +107,43 @@ function updateEnemies() {
   });
 }
 
-function drawProjectiles() {
-  projectiles.forEach((projectile) => {
-    ctx.drawImage(projectileImage, projectile.x, projectile.y, projectile.size, projectile.size);
+function findNearestEnemy(player, enemies) {
+  let nearestEnemy = null;
+  let minDistance = Infinity;
+
+  enemies.forEach(enemy => {
+      const distance = Math.hypot(enemy.x - player.x, enemy.y - player.y);
+      if (distance < minDistance) {
+          minDistance = distance;
+          nearestEnemy = enemy;
+      }
   });
+
+  return nearestEnemy;
+}
+
+function drawProjectiles() {
+    projectiles.forEach(projectile => {
+        ctx.drawImage(projectileImage, 
+            projectile.x, 
+            projectile.y, 
+            projectile.size, 
+            projectile.size
+        );
+    });
 }
 
 function updateProjectiles() {
-  projectiles.forEach((projectile, index) => {
-    projectile.x += projectile.direction.x * projectile.speed;
-    projectile.y += projectile.direction.y * projectile.speed;
-
-    if (
-      projectile.x < 0 ||
-      projectile.x > canvas.width ||
-      projectile.y < 0 ||
-      projectile.y > canvas.height
-    ) {
-      projectiles.splice(index, 1);
+    for(let i = projectiles.length - 1; i >= 0; i--) {
+        projectiles[i].x += projectiles[i].direction.x;
+        projectiles[i].y += projectiles[i].direction.y;
+        
+        // Remove if out of bounds
+        if (projectiles[i].x < 0 || projectiles[i].x > canvas.width ||
+            projectiles[i].y < 0 || projectiles[i].y > canvas.height) {
+            projectiles.splice(i, 1);
+        }
     }
-  });
 }
 
 function spawnEnemy() {
@@ -175,14 +197,35 @@ function stopMovement(event) {
 }
 
 function shootProjectile() {
-  let projectile = {
-    x: player.x + player.size / 2,
-    y: player.y + player.size / 2,
-    size: 15,
-    speed: 10,
-    direction: { x: player.lastDirection.x, y: player.lastDirection.y },
-  };
-  projectiles.push(projectile);
+    const currentTime = Date.now();
+    if (currentTime - lastShotTime < SHOOT_COOLDOWN) return;
+    
+    const nearestEnemy = findNearestEnemy(player, enemies);
+    if (!nearestEnemy) return;
+
+    // Calculate direction from center of player to center of enemy
+    const dx = (nearestEnemy.x + nearestEnemy.size/2) - (player.x + player.size/2);
+    const dy = (nearestEnemy.y + nearestEnemy.size/2) - (player.y + player.size/2);
+    
+    // Normalize the direction
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const normalizedDx = dx / distance;
+    const normalizedDy = dy / distance;
+    
+    const projectileSpeed = 7;
+    
+    const projectile = {
+        x: player.x + player.size/2 - 5, // Center of player
+        y: player.y + player.size/2 - 5, // Center of player
+        size: 20,
+        direction: {
+            x: normalizedDx * projectileSpeed,
+            y: normalizedDy * projectileSpeed
+        }
+    };
+
+    projectiles.push(projectile);
+    lastShotTime = currentTime;
 }
 
 function resetGame() {
@@ -231,6 +274,7 @@ function gameLoop() {
   drawEnemies();
   updateProjectiles();
   drawProjectiles();
+  shootProjectile();
 
   enemies.forEach((enemy, enemyIndex) => {
     if (isColliding(player, enemy)) {
